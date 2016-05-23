@@ -12,18 +12,19 @@
 
 <%
 try{
-Class.forName("com.mysql.jdbc.Driver")
-String connURL ="jdbc:mysql://localhost/fyp?user=root&password=root"
-Connection conn = DriverManager.getConnection(connURL)
+Class.forName("com.mysql.jdbc.Driver");
+String connURL ="jdbc:mysql://localhost/fyp?user=root&password=root";
+Connection conn = DriverManager.getConnection(connURL);
 
 Statement stmt=conn.createStatement();
 
 String username =request.getParameter("username");
 String password =request.getParameter("password");
 
-String sqlStr ="Select * From login where username'" + username + "' and password='" + password + "'";
+String sqlStr ="Select * From users where username'" + username + "' and password='" + password + "'";
+ResultSet rs = stmt.executeQuery(sqlStr);
 
-if (rs.next() )
+if (rs.next()) {
 	response.sendRedirect("dashboard.html");
 } else {
 	response.sendRedirect("index.html");
