@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 	
-<%@page import="java.io.*, java.util.*, javax.swing.*, java.sql.*" %> 
-
+	<%@page import="java.io.*, java.util.*, javax.swing.*, java.sql.*" %> 
+	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PWC | Industry Management</title>
+<title>PWC | Question Management</title>
 <meta
 	content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
 	name='viewport'>
@@ -31,6 +31,7 @@
         <![endif]-->
 </head>
 <body class="skin-blue">
+
 <%
 	//Check if any USER session
 	if ((session.getAttribute("UserName")==null) || (session.getAttribute("AuditorName")==null)){
@@ -51,8 +52,7 @@
 		// Step 4: Create Statement object
 		Statement stmt = conn.createStatement();
 %>
-    
-    
+
 	<!-- header logo: style can be found in header.less -->
 	<header class="header"> <a href="dashboard.jsp" class="logo">
 		<!-- Add the class icon to your logo image or logo icon to add the margining -->
@@ -113,9 +113,9 @@
 				<ul class="treeview-menu">
 					<li><a href="usermanagement.jsp"><i
 							class="fa fa-angle-double-right"></i> User Management</a></li>
-					<li class="active"><a href="industrymanagement.jsp"><i
+					<li><a href="industrymanagement.jsp"><i
 							class="fa fa-angle-double-right"></i> Industry Management</a></li>
-					<li><a href="questionmanagement.jsp"><i
+					<li class="active"><a href="questionmanagement.jsp"><i
 							class="fa fa-angle-double-right"></i> Question Management</a></li>
 				</ul></li>
 			<li class="treeview"><a href="#"> <i class="fa fa-laptop"></i>
@@ -127,7 +127,6 @@
 					<li><a href="pages/UI/icons.html"><i
 							class="fa fa-angle-double-right"></i> Create New</a></li>
 				</ul></li>
-
 		</ul>
 		</section> <!-- /.sidebar --> </aside>
 
@@ -135,13 +134,13 @@
 		<aside class="right-side"> <!-- Content Header (Page header) -->
 		<section class="content-header">
 		<h1>
-			Industry Management <small>Control panel</small>
+			Question Management <small>Control panel</small>
 		</h1>
 		<ol class="breadcrumb">
 			<li><a href="index.html"><i class="fa fa-dashboard"></i>
 					Home</a></li>
 			<li><a><i class="fa fa-archive"></i> Control Panel</a></li>
-			<li class="active">Industry Management</li>
+			<li class="active">Question Management</li>
 		</ol>
 		</section> <!-- Main content --> <section class="content"> <!-- top row -->
 		<!-- /.row --> 
@@ -152,97 +151,147 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
-						<div class="box">
-							<div class="box-header">
-								<h3 class="box-title">Industry Table</h3>
-									<div class="box-tools">
-                                        <div class="input-group">
-                                        	<form  class="formadd" action="industryAdd.jsp">
-	                                            <input type="text" name="industryAdd" class="form-control input-sm pull-right" style="width: 150px;" placeholder="Add New Industry Name"/>
-	                                            <div class="input-group-btn">
-	                                                <button class="btn btn-info btn-flat">Add!</button>
-	                                            </div>
-	                                      	</form>
-                                        </div>
-                                    </div>
-							</div>
-						<!-- /.box-header -->
-						<div class="box-body table-responsive no-padding">
-							<table class="table table-hover">
-								<tr>
-									<th>ID</th>
-									<th>Industry</th>
-									<th>Actions</th>
-								</tr>
-								
-								<%
-									String IndustrySql="select * from cscensus.industries where disabled = 0";
-									ResultSet Industryrs = stmt.executeQuery(IndustrySql);
-									
-									while (Industryrs.next()){
-									%>
-										<tr>
-											<td><%=Industryrs.getString("IndustryID") %></td>
-											<td><%=Industryrs.getString("IndustryName") %></td>
-											<td>
-												<form class="form" action="editIndustry.jsp">
-													<input type='hidden' name='editIndustry' value='<%=Industryrs.getString("IndustryID") %>'/>
-													<button class="btn btn-primary btn-sm">Edit</button>
-												</form>
-												
-												<form class="form" action="disableIndustry.jsp">
-													<input type='hidden' name='disableIndustry' value='<%=Industryrs.getString("IndustryID") %>'/>
-													<button class="btn btn-danger btn-sm">Disable</button>
-												</form>
-											
-											</td>
-										</tr>
-									<%
-										}
-									%>
-							</table>
-						</div>
-						<!-- /.box-body -->
-					</div>
-					<!-- /.box -->
-				</div>
-			</div>
-			
-			<div class="row">
+						<tr>
+	                		<td>
+	                        	<div class="btn-group">
+	                        		<form class="form" action="questionmanagement.jsp">
+	                            			<button class="btn btn-info">Both</button>
+	                            	</form>
+	                            	
+	                            	<form class="form" action="ukDomain.jsp">
+	                            		<button class="btn btn-info">UK Domain</button>
+	                            	</form>
+	                            	
+	                            	<form class="form" action="usDomain.jsp">
+	                             		<button class="btn btn-info">US Domain</button>
+	                             	</form>
+	                    		</div>
+	                    	</td>
+	                   	</tr>
+	           		</div>
+	         	</div>
+	                   	
+				<div class="row">
 					<div class="col-xs-12">
 						<div class="box">
 							<div class="box-header">
-								<h3 class="box-title">Disabled Industry Table</h3>
+								<h3 class="box-title"> UK Questions Table</h3>
 							</div>
+							
+							<div class="col-md-6">
+                            <!-- Custom Tabs -->
+                            <div class="nav-tabs-custom">
+                            	<ul class="nav nav-tabs">
+	                            	<%
+	                            		// SQL statement for UKDomains Section
+										String ukDomainSql="select * from cscensus.ukdomains";
+										ResultSet ukDomainrs = stmt.executeQuery(ukDomainSql);
+										
+										int counter = 1;
+										
+										while (ukDomainrs.next()){
+											
+											
+											if (counter == 1){
+												%>
+				                            		<li class="active"><a href="#tab_<%=ukDomainrs.getString("UKDomID") %>" data-toggle="tab"><%=ukDomainrs.getString("UKDomainName") %></a></li>
+			                            		<%
+											} else {
+												%>
+		                                   	 	<li><a href="#tab_<%=ukDomainrs.getString("UKDomID") %>" data-toggle="tab"><%=ukDomainrs.getString("UKDomainName") %></a></li>
+			                            		<%
+											}
+											
+											counter++;
+											
+											String UKDOMID = ukDomainrs.getString("UKDomID");
+											
+											// SQL Satement for UKDomain QUESTIONS
+											String ukDomainQuestionSql="select * from cscensus.questions where UKDomID = UKDOMID ";
+											ResultSet ukDomainQuestionrs = stmt.executeQuery(ukDomainQuestionSql);
+													
+											while (ukDomainQuestionrs.next()){
+												
+											}
+											
+										}
+									%>
+								</ul>
+								
+								
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1">
+                                        <b>How to use:</b>
+                                        <p>Exactly like the original bootstrap tabs except you should use
+                                            the custom wrapper <code>.nav-tabs-custom</code> to achieve this style.</p>
+                                        A wonderful serenity has taken possession of my entire soul,
+                                        like these sweet mornings of spring which I enjoy with my whole heart.
+                                        I am alone, and feel the charm of existence in this spot,
+                                        which was created for the bliss of souls like mine. I am so happy,
+                                        my dear friend, so absorbed in the exquisite sense of mere tranquil existence,
+                                        that I neglect my talents. I should be incapable of drawing a single stroke
+                                        at the present moment; and yet I feel that I never was a greater artist than now.
+                                    </div><!-- /.tab-pane -->
+                                    <div class="tab-pane" id="tab_2">
+                                        The European languages are members of the same family. Their separate existence is a myth.
+                                        For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ
+                                        in their grammar, their pronunciation and their most common words. Everyone realizes why a
+                                        new common language would be desirable: one could refuse to pay expensive translators. To
+                                        achieve this, it would be necessary to have uniform grammar, pronunciation and more common
+                                        words. If several languages coalesce, the grammar of the resulting language is more simple
+                                        and regular than that of the individual languages.
+                                    </div><!-- /.tab-pane -->
+                                </div><!-- /.tab-content -->
+	                       	</div><!-- nav-tabs-custom -->
+	                        </div><!-- /.col -->
+                        
+                        
 						<!-- /.box-header -->
 						<div class="box-body table-responsive no-padding">
 							<table class="table table-hover">
 								<tr>
 									<th>ID</th>
-									<th>Industry</th>
-									<th>Actions</th>
+									<th>Question</th>
+									<th>Immature description </th>
+									<th>Mature description</th>
+									<th>Actions </th>
 								</tr>
 								
+								
 								<%
-									String disableIndustrySql="select * from cscensus.industries where disabled = 1";
-									ResultSet disableIndustryrs = stmt.executeQuery(disableIndustrySql);
+									String questionSql="select * from cscensus.questions where Disabled = 0";
+									ResultSet questionrs = stmt.executeQuery(questionSql);
 									
-									while (disableIndustryrs.next()){
+									while (questionrs.next()){
 									%>
 										<tr>
-											<td><%=disableIndustryrs.getString("IndustryID") %></td>
-											<td><%=disableIndustryrs.getString("IndustryName") %></td>
+											<td><%=questionrs.getString("QuestionID") %></td>
+											<td><%=questionrs.getString("Question") %></td>
 											<td>
-												<form class="form" action="EnableIndustry.jsp">
-													<input type='hidden' name='EnableIndustry' value='<%=disableIndustryrs.getString("IndustryID") %>'/>
-													<button class="btn btn-danger btn-sm">Enable</button>
-												</form>
-											
+												<% if (questionrs.getString("ImmatureDesc") == null){
+													%>
+														-
+													<%
+												} else {
+													questionrs.getString("ImmatureDesc");
+												}
+												%>
+											</td>
+											<td>
+												<% if (questionrs.getString("MatureDesc") == null){
+													%>
+														-
+													<%
+												} else {
+													questionrs.getString("MatureDesc");
+												}
+												%>
 											</td>
 										</tr>
 									<%
 										}
 									%>
+								
 							</table>
 						</div>
 						<!-- /.box-body -->
@@ -250,7 +299,6 @@
 					<!-- /.box -->
 				</div>
 			</div>
-			
 			</section>
 			<!-- /.Left col -->
 
@@ -274,6 +322,7 @@
 
 	<!-- AdminLTE App -->
 	<script src="js/AdminLTE/app.js" type="text/javascript"></script>
+
 <%
 	        	conn.close();
 				} catch(Exception e){
@@ -282,5 +331,6 @@
 			
     		}  // FOR USER session Else statement
 %>
+
 </body>
 </html>

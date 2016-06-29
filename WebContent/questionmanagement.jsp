@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	
+	<%@page import="java.io.*, java.util.*, javax.swing.*, java.sql.*" %> 
+	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -28,6 +31,28 @@
         <![endif]-->
 </head>
 <body class="skin-blue">
+
+<%
+	//Check if any USER session
+	if ((session.getAttribute("UserName")==null) || (session.getAttribute("AuditorName")==null)){
+		response.sendRedirect("login.jsp");
+	} else {
+		String UserName = (String)session.getAttribute("UserName");
+		String AuditorName = (String)session.getAttribute("AuditorName");
+		String Admin = (String)session.getAttribute("Admin");
+		
+		
+	try {
+		// Step1: Load JDBC Driver
+		Class.forName("com.mysql.jdbc.Driver");
+		// Step 2: Define Connection URL
+		String connURL = "jdbc:mysql://localhost/cscensus?user=root&password=root";
+		// Step 3: Establish connection to URL
+		Connection conn = DriverManager.getConnection(connURL);
+		// Step 4: Create Statement object
+		Statement stmt = conn.createStatement();
+%>
+
 	<!-- header logo: style can be found in header.less -->
 	<header class="header"> <a href="dashboard.jsp" class="logo">
 		<!-- Add the class icon to your logo image or logo icon to add the margining -->
@@ -43,28 +68,17 @@
 		<ul class="nav navbar-nav">
 			<li class="dropdown user user-menu"><a href="#"
 				class="dropdown-toggle" data-toggle="dropdown"> <i
-					class="glyphicon glyphicon-user"></i> <span>Jane Doe <i
-						class="caret"></i></span>
+					class="glyphicon glyphicon-user"></i> <span>
+						<%=AuditorName %> 
+						<i class="caret"></i></span>
 			</a>
 				<ul class="dropdown-menu">
 					<!-- User image -->
-					<li class="user-header bg-light-blue"><img
-						src="img/avatar3.png" class="img-circle" alt="User Image" />
+					<li class="user-header bg-light-blue">
 						<p>
-							Jane Doe - Web Developer <small>Member since Nov. 2012</small>
+							<%=AuditorName %>
+							<small>Member since Nov. 2012</small>
 						</p></li>
-					<!-- Menu Body -->
-					<li class="user-body">
-						<div class="col-xs-4 text-center">
-							<a href="#">Followers</a>
-						</div>
-						<div class="col-xs-4 text-center">
-							<a href="#">Sales</a>
-						</div>
-						<div class="col-xs-4 text-center">
-							<a href="#">Friends</a>
-						</div>
-					</li>
 					<!-- Menu Footer-->
 					<li class="user-footer">
 						<div class="pull-left">
@@ -84,7 +98,7 @@
 		<section class="sidebar"> <!-- Sidebar user panel -->
 		<div class="user-panel">
 			<div class="pull-left info">
-				<p>Hello, Jane</p>
+				<p>Hello, <%=AuditorName %></p>
 			</div>
 		</div>
 		<!-- sidebar menu: : style can be found in sidebar.less -->
@@ -137,21 +151,31 @@
 			<section class="content">
 				<div class="row">
 					<div class="col-xs-12">
+						<tr>
+	                		<td>
+	                        	<div class="btn-group">
+	                        		<form class="form" action="questionmanagement.jsp">
+	                            			<button class="btn btn-info">Both</button>
+	                            	</form>
+	                            	
+	                            	<form class="form" action="ukDomain.jsp">
+	                            		<button class="btn btn-info">UK Domain</button>
+	                            	</form>
+	                            	
+	                            	<form class="form" action="usDomain.jsp">
+	                             		<button class="btn btn-info">US Domain</button>
+	                             	</form>
+	                    		</div>
+	                    	</td>
+	                   	</tr>
+	           		</div>
+	         	</div>
+	                   	
+				<div class="row">
+					<div class="col-xs-12">
 						<div class="box">
 							<div class="box-header">
 								<h3 class="box-title">Questions Table</h3>
-								<div class="box-tools">
-									<div class="input-group">
-										<input type="text" name="table_search"
-										class="form-control input-sm pull-right" style="width: 150px;"
-										placeholder="Search" />
-										<div class="input-group-btn">
-											<button class="btn btn-sm btn-default">
-												<i class="fa fa-search"></i>
-											</button>
-										</div>
-									</div>
-								</div>
 							</div>
 						<!-- /.box-header -->
 						<div class="box-body table-responsive no-padding">
@@ -161,48 +185,43 @@
 									<th>Question</th>
 									<th>Immature description </th>
 									<th>Mature description</th>
-									<th>Actions</th>
 								</tr>
-								<tr>
-									<td>183</td>
-									<td>Is there a mobile security policy that is regularly updated in light of technological developments, accessible and can be read and understood by all employees?</td>
-									<td>There is no mobile security policy.</td>
-									<td>Organisational mobile security policy defined, documented, distributed and regularly updated in line with changing risks and technology.</td>
-									<td>
-									<button class="btn btn-primary btn-sm">Edit</button>
-									<button class="btn btn-danger btn-sm">Remove</button>
-									</td>
-								</tr>
-								<tr>
-									<td>521</td>
-									<td>Is there a mobile security policy that is regularly updated in light of technological developments, accessible and can be read and understood by all employees?</td>
-									<td>There is no mobile security policy.</td>
-									<td>Organisational mobile security policy defined, documented, distributed and regularly updated in line with changing risks and technology.</td>
-									<td>
-									<button class="btn btn-primary btn-sm">Edit</button>
-									<button class="btn btn-danger btn-sm">Remove</button>
-									</td>
-								</tr>
-								<tr>
-									<td>651</td>
-									<td>Is there a mobile security policy that is regularly updated in light of technological developments, accessible and can be read and understood by all employees?</td>
-									<td>There is no mobile security policy.</td>
-									<td>Organisational mobile security policy defined, documented, distributed and regularly updated in line with changing risks and technology.</td>
-									<td>
-									<button class="btn btn-primary btn-sm">Edit</button>
-									<button class="btn btn-danger btn-sm">Remove</button>
-									</td>
-								</tr>
-								<tr>
-									<td>723</td>
-									<td>Is there a mobile security policy that is regularly updated in light of technological developments, accessible and can be read and understood by all employees?</td>
-									<td>There is no mobile security policy.</td>
-									<td>Organisational mobile security policy defined, documented, distributed and regularly updated in line with changing risks and technology.</td>
-									<td>
-									<button class="btn btn-primary btn-sm">Edit</button>
-									<button class="btn btn-danger btn-sm">Remove</button>
-									</td>
-								</tr>
+								
+								
+								<%
+									String questionSql="select * from cscensus.questions where Disabled = 0";
+									ResultSet questionrs = stmt.executeQuery(questionSql);
+									
+									while (questionrs.next()){
+									%>
+										<tr>
+											<td><%=questionrs.getString("QuestionID") %></td>
+											<td><%=questionrs.getString("Question") %></td>
+											<td>
+												<% if (questionrs.getString("ImmatureDesc") == null){
+													%>
+														-
+													<%
+												} else {
+													questionrs.getString("ImmatureDesc");
+												}
+												%>
+											</td>
+											<td>
+												<% if (questionrs.getString("MatureDesc") == null){
+													%>
+														-
+													<%
+												} else {
+													questionrs.getString("MatureDesc");
+												}
+												%>
+											</td>
+										</tr>
+									<%
+										}
+									%>
+								
 							</table>
 						</div>
 						<!-- /.box-body -->
@@ -233,6 +252,15 @@
 
 	<!-- AdminLTE App -->
 	<script src="js/AdminLTE/app.js" type="text/javascript"></script>
+
+<%
+	        	conn.close();
+				} catch(Exception e){
+				out.println(e);
+				} // Try Catch
+			
+    		}  // FOR USER session Else statement
+%>
 
 </body>
 </html>
